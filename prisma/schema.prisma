@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model allergies {
+  id                             Int       @id @default(autoincrement())
+  patient_id                     Int?
+  allergy_remarks                String?
+  allergy_since                  DateTime? @db.Date
+  allergy_medications_used       String?   @db.VarChar(300)
+  allergy_medications_prescribed String?
+  consultant_name                String?   @db.VarChar(300)
+  patients                       patients? @relation(fields: [patient_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model patient_photos {
+  id         Int       @id @default(autoincrement())
+  patient_id Int?      @unique(map: "uq_patient_photos")
+  image_url  String?   @db.VarChar(500)
+  patients   patients? @relation(fields: [patient_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model patients {
+  id                            Int             @id @default(autoincrement())
+  full_name                     String          @db.VarChar(200)
+  email                         String          @db.VarChar(200)
+  phone                         String          @db.VarChar(30)
+  address                       String?         @db.VarChar(300)
+  date_of_birth                 String?         @db.VarChar(10)
+  is_special_attention          Boolean?        @default(false)
+  added_by                      Int?
+  created_at                    DateTime        @default(now()) @db.Date
+  updated                       DateTime        @default(now()) @db.Date
+  status                        Boolean         @default(true)
+  deleted_at                    DateTime?       @db.Date
+  avatar_filename               String?         @db.VarChar(500)
+  allergies                     String[]
+  users                         users?          @relation(fields: [added_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  allergies_allergiesTopatients allergies[]
+  patient_photos                patient_photos?
+
+  @@unique([email, phone], map: "uq_patients")
+}
+
+model user_logs {
+  id       Int       @id @default(autoincrement())
+  user_id  Int?
+  remarks  String?   @db.VarChar(300)
+  datetime DateTime? @default(now()) @db.Timestamp(6)
+  users    users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model user_tokens {
+  id       Int      @id @default(autoincrement())
+  user_id  Int?
+  token    String   @db.VarChar(8)
+  is_valid Boolean? @default(true)
+  users    users?   @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([user_id, token], map: "uq_user_tokens")
+}
+
+model users {
+  id          Int           @id @default(autoincrement())
+  email       String        @db.VarChar(200)
+  password    String        @db.VarChar(300)
+  is_active   Boolean?      @default(true)
+  created_at  DateTime      @default(now()) @db.Date
+  status      Boolean       @default(true)
+  deleted_at  DateTime?     @db.Date
+  updated_at  DateTime?     @default(now()) @db.Date
+  patients    patients[]
+  user_logs   user_logs[]
+  user_tokens user_tokens[]
+}

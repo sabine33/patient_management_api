@@ -1,0 +1,518 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "PPM API",
+    "contact": {},
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:4000",
+      "variables": {}
+    }
+  ],
+  "paths": {
+    "/patients": {
+      "get": {
+        "tags": ["Patients"],
+        "summary": "List all patients.",
+        "operationId": "all_patients",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "deprecated": false,
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": ["Patients"],
+        "summary": "Add Patient",
+        "operationId": "add_patient",
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddPatientRequest"
+              }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          },
+          "400": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "deprecated": false,
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/patients/{id}": {
+      "get": {
+        "tags": ["Patients"],
+        "summary": "Get patient by id",
+        "operationId": "get_patient_by_id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of patient",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "deprecated": false,
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": ["Patients"],
+        "summary": "Update patient",
+        "operationId": "update_patient",
+        "parameters": [],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/AddPatientRequest"
+                  },
+                  {
+                    "type": "object",
+                    "example": {
+                      "full_name": "Sabin khanal",
+                      "email": "sabin.khanal.33@gmail.com",
+                      "phone": "9863180880",
+                      "address": "Nayabazar,Kathmandu",
+                      "date_of_birth": "1994-04-12",
+                      "is_special_attention": false,
+                      "added_by": 5,
+                      "created_at": "2022-11-24",
+                      "updated": "2022-11-24",
+                      "status": true,
+                      "deleted_at": null,
+                      "avatar_filename": "default.png",
+                      "allergies": ["'Skin Allergy'"]
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "deprecated": false,
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["Patients"],
+        "description": "deletes patient",
+        "operationId": "delete_patient",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of patient",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "patient deleted"
+          },
+          "default": {
+            "description": "unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+  },
+  "/auth/login": {
+    "post": {
+      "tags": ["Authentication"],
+      "summary": "Login API",
+      "description": "Helps user log in to the system.\r\n",
+      "operationId": "LoginAPI",
+      "parameters": [],
+      "requestBody": {
+        "description": "",
+        "content": {
+          "application/json": {
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/LoginAPIRequest"
+                },
+                {
+                  "example": {
+                    "email": "sabin.khanal.33@gmail.com",
+                    "password": "appleball"
+                  }
+                }
+              ]
+            },
+            "example": {
+              "email": "sabin.khanal.33@gmail.com",
+              "password": "appleball"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "",
+          "headers": {}
+        }
+      },
+      "deprecated": false,
+      "security": []
+    }
+  },
+
+  "/upload/avatar": {
+    "post": {
+      "tags": ["User Management"],
+      "summary": "Upload Profile Image",
+      "operationId": "UploadProfileImage",
+      "parameters": [],
+      "requestBody": {
+        "content": {
+          "multipart/form-data": {
+            "schema": {
+              "required": ["avatar"],
+              "type": "object",
+              "properties": {
+                "avatar": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        },
+        "required": false
+      },
+      "responses": {
+        "200": {
+          "description": "",
+          "headers": {}
+        }
+      },
+      "deprecated": false,
+      "security": [
+        {
+          "bearer": []
+        }
+      ]
+    }
+  },
+
+  "/users/update-password": {
+    "put": {
+      "tags": ["User Management"],
+      "summary": "Update Password",
+      "operationId": "UpdatePassword",
+      "parameters": [],
+      "requestBody": {
+        "description": "",
+        "content": {
+          "application/json": {
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/UpdatePasswordRequest"
+                },
+                {
+                  "example": {
+                    "password": "appleball2",
+                    "password_again": "appleball22"
+                  }
+                }
+              ]
+            },
+            "example": {
+              "password": "appleball2",
+              "password_again": "appleball22"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "",
+          "headers": {}
+        }
+      },
+      "deprecated": false,
+      "security": [
+        {
+          "bearer": []
+        }
+      ]
+    }
+  },
+  "/": {
+    "get": {
+      "tags": ["Misc"],
+      "summary": "Base API",
+      "operationId": "BaseAPI",
+      "parameters": [],
+      "responses": {
+        "200": {
+          "description": "",
+          "headers": {}
+        }
+      },
+      "deprecated": false
+    }
+  },
+  "/uploads/4baacdd20e2199705a2f2749355098b5-time1.jpg": {
+    "get": {
+      "tags": ["Misc"],
+      "summary": "Public Resource",
+      "operationId": "PublicResource",
+      "parameters": [],
+      "responses": {
+        "200": {
+          "description": "",
+          "headers": {}
+        }
+      },
+      "deprecated": false
+    }
+  },
+  "components": {
+    "schemas": {
+      "AddPatientRequest": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AddPatientRequest"
+          },
+          {
+            "type": "object",
+            "required": [
+              "email"
+            ],
+            "properties": {
+              "email": {
+                "type": "string",
+                "format": "string"
+              }
+            }
+          }
+        ]
+      },
+      "SignupAPIRequest": {
+        "title": "Signup API Request",
+        "required": ["email", "password", "full_name"],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "full_name": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "email": "sabin.khanal.33@gmail.com",
+          "password": "appleball",
+          "full_name": "sabin khanal"
+        }
+      },
+      "LoginAPIRequest": {
+        "title": "Login API Request",
+        "required": ["email", "password"],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "email": "sabin.khanal.33@gmail.com",
+          "password": "appleball"
+        }
+      },
+      "ForgotPasswordRequest": {
+        "title": "Forgot Password Request",
+        "required": ["email"],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "email": "sabin.khanal.33@gmail.com"
+        }
+      },
+      "ValidateTokenRequest": {
+        "title": "Validate Token Request",
+        "required": ["id", "token"],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "token": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "id": 1,
+          "token": "$argon2id$v=19$m=4096,t=3,p=1$JFxvWVFdw8O83Pf3Q8hC0Q$jV6kCrcNh0OZwRYkHGUJ2yle+tvCmBgVsNhAakRstMY"
+        }
+      },
+      "ResetPasswordRequest": {
+        "title": "Reset password request",
+        "required": ["email", "password", "token"],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "email": "sabin.khanal.33@gmail.com",
+          "password": "appleball",
+          "token": "$argon2id$v=19$m=4096,t=3,p=1$aUkpdx9MWXwZm6Y01ReRQA$Dd0kOHjURsn20gD14UaDAfxDOtrNvz/lESi+TBwDJHo"
+        }
+      },
+      "UpdateProfileRequest": {
+        "title": "Update profile request",
+        "required": ["full_name"],
+        "type": "object",
+        "properties": {
+          "full_name": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "full_name": "KHANAL"
+        }
+      },
+      "UpdatePasswordRequest": {
+        "title": "Update password request",
+        "required": ["password", "password_again"],
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string"
+          },
+          "password_again": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "password": "appleball",
+          "password_again": "appleball"
+        }
+      },
+      "Error": {
+        "type": "object",
+        "required": ["code", "message"],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "security": [],
+  "tags": [
+    {
+      "name": "Authentication"
+    },
+    {
+      "name": "User Management"
+    },
+    {
+      "name": "Misc"
+    },
+    {
+      "name": "Uploads"
+    },
+    {
+      "name": "Patients"
+    }
+  ]
+}
