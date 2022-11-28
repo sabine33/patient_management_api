@@ -12,4 +12,4 @@ COPY . .
 RUN yarn build
 COPY src/emails /usr/app/ppm/build/src/emails
 EXPOSE 4000
-CMD [ "node", "-r" ,"tsconfig-paths/register" ,"build/src/app.js"]
+CMD [ "yarn","prod"]
