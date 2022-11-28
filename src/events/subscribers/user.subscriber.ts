@@ -12,7 +12,7 @@ export default class UserSubscriber {
   public async onUserSignIn({ id }: Partial<IUser>) {
     const Logger: Logger = Container.get("logger");
     try {
-      //   await User.update({ where: { id }, data: {} });
+      Logger.info({ message: "User signed in" });
     } catch (e) {
       Logger.error(`🔥 Error on event ${events.user.signIn}: %o`, e);
       throw e;
@@ -20,10 +20,10 @@ export default class UserSubscriber {
   }
 
   @On(events.user.signUp)
-  public async onUserSignUp({ email, username }: Partial<IUser>) {
+  public async onUserSignUp({ email }: Partial<IUser>) {
     const Logger: Logger = Container.get("logger");
     try {
-      await new MailerService().sendWelcomeEmail(email, { username });
+      await new MailerService().sendWelcomeEmail(email);
       Logger.info({ message: email });
     } catch (e) {
       Logger.error(`🔥 Error on event ${events.user.signUp}: %o`, e);

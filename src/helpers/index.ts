@@ -1,16 +1,20 @@
-import LoggerInstance from "@/loaders/logger.loader";
+// import LoggerInstance from "@/loaders/logger.loader";
 import jwt from "jsonwebtoken";
 import path from "path";
 import fs from "fs";
 import handlebars from "handlebars";
 import argon2 from "argon2";
-const EXPIRES_IN = "10h";
-const TOKEN_EXPIRY_IN_MINUTES = 720;
+const EXPIRES_IN = "1h";
+const TOKEN_EXPIRY_IN_MINUTES = 60;
 import dayjs from "dayjs";
-import config from "@/config";
+import config from "../config";
 
 export const generateTokenExpiryTime = () => {
   return dayjs().unix().valueOf() + TOKEN_EXPIRY_IN_MINUTES * 1000 * 60;
+};
+
+export const generateRandomNumber = (min: number, max: number) => {
+  return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
 /**
@@ -32,11 +36,10 @@ export async function asyncForEach<T>(
  * @param {id,email} ID & Email
  * @returns Generated token
  */
-export function generateToken({ id, email }) {
-  LoggerInstance.silly(`Sign JWT for userId: ${id}`);
+export function generateToken({ email }) {
+  // LoggerInstance.silly(`Sign JWT for email: ${email}`);
   return jwt.sign(
     {
-      id,
       email,
     },
     config.tokenKey,
@@ -46,19 +49,22 @@ export function generateToken({ id, email }) {
   );
 }
 
-export function generateRefreshToken({ id, email, username }) {
-  LoggerInstance.silly(`Sign JWT for userId: ${id}`);
+export function generateRefreshToken({ email }) {
   return jwt.sign(
     {
-      id,
       email,
-      username,
     },
     config.refreshTokenKey,
     {
       expiresIn: config.refreshTokenExpiresIn || "10h",
     }
   );
+}
+
+export function verifyRefreshToken({ token, email }) {
+  let decoded = jwt.verify(token, config.refreshTokenKey);
+  console.log(decoded.email);
+  return decoded.email === email;
 }
 
 /**

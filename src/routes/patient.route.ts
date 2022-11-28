@@ -11,9 +11,9 @@ import {
 
 const router = Router();
 export default () => {
-  router.get("/", patientController.index);
+  router.get("/", isAuthenticated, patientController.index);
 
-  router.get("/recent", patientController.getRecentPatients);
+  router.get("/info/stats", isAuthenticated, patientController.getStats);
 
   router.post(
     "/",

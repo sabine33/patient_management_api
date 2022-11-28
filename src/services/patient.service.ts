@@ -7,11 +7,6 @@ import { orderBy } from "lodash";
 @Service("PatientService")
 export default class PatientService {
   async getAll() {
-    const patients = await prisma.patients.findMany();
-    return patients;
-  }
-
-  async getRecentPatients() {
     const patients = await prisma.patients.findMany({
       orderBy: [
         {
@@ -20,9 +15,21 @@ export default class PatientService {
         {
           id: "desc",
         },
+        {
+          full_name: "asc",
+        },
       ],
     });
     return patients;
+  }
+
+  async getStats() {
+    const patientsCount = await prisma.patients.aggregate({
+      _count: {
+        id: true,
+      },
+    });
+    return { count: patientsCount._count.id };
   }
 
   async getById(patient_id: number) {

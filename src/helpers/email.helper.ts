@@ -15,19 +15,19 @@ const transport = nodemailer.createTransport(
  * Send Email
  * @param {string,string,string,object}
  */
-export async function sendEmail({ receiver, subject, template, data }) {
-  const fromEmail = `${process.env.MAILJET_SENDER || "Leapfrog"} <${
+export async function sendEmail({ receiver, subject, template }) {
+  const fromEmail = `${process.env.MAILJET_SENDER || "PPM API"} <${
     process.env.MAILJET_SENDER_EMAIL || "sabin.khana.33l@gmail.com"
   }>`;
 
-  console.log(renderHtmlTemplate(template, data));
+  console.log(renderHtmlTemplate(template, null));
 
   transport.sendMail(
     {
       from: fromEmail,
       to: receiver,
       subject: subject,
-      html: renderHtmlTemplate(template, data),
+      html: renderHtmlTemplate(template, null),
     },
     (error, info) => {
       if (error) {

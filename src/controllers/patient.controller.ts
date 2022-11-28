@@ -22,16 +22,13 @@ class PatientController {
       message: "Patient loaded successfully.",
     });
   };
-  getRecentPatients = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
-    const patients = await this.patientService.getRecentPatients();
+
+  getStats = async (req: Request, res: Response, next: NextFunction) => {
+    const stats = await this.patientService.getStats();
     res.success({
       status: true,
-      data: patients,
-      message: "Patients loaded successfully.",
+      data: stats,
+      message: "Patients stats loaded successfully.",
     });
   };
 

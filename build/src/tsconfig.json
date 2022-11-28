@@ -25,11 +25,11 @@
     },
     "plugins": [
       {
-        "transform": "typescript-transform-paths"
+        "transform": "@zerollup/ts-transform-paths"
       }
     ]
   },
-  "include": ["./src/**/*"],
+  "include": ["./src/**/*", "src/testsests"],
   "exclude": ["node_modules/src/testsrc/tests", "node_modules"]
 }
 

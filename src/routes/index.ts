@@ -7,12 +7,12 @@ import uploadRoutes from "./upload.route";
 import userRoutes from "./user.route";
 
 export default () => {
-  const app = Router();
-  app.use("/", helloRoutes());
-  app.use("/users", userRoutes());
-  app.use("/auth", authRoutes());
-  app.use("/patients", patientRoute());
-  app.use("/docs", docsRoutes());
-  app.use("/uploads", uploadRoutes());
-  return app;
+  const router = Router();
+  router.use("/", helloRoutes());
+  router.use("/users", userRoutes());
+  router.use("/auth", authRoutes());
+  router.use("/patients", patientRoute());
+  router.use("/docs", docsRoutes());
+  router.use("/uploads", uploadRoutes());
+  return router;
 };

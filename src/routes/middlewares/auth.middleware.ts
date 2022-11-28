@@ -15,6 +15,9 @@ const getTokenFromHeader = (req) => {
 
 export const isAuthenticated = (req, res, next) => {
   const bearerToken = getTokenFromHeader(req);
+
+  console.log(bearerToken);
+
   if (!bearerToken) {
     return res.error({
       message: "A token is required for authentication.",

@@ -2,14 +2,16 @@ import MailerService from "@/services/mailer.service";
 import { User, Token } from "@/models";
 import { Service, Inject, Container } from "typedi";
 import * as argon2 from "argon2";
-import { generateRefreshToken, generateToken, hashPassword } from "@/helpers";
+import {
+  generateRefreshToken,
+  generateToken,
+  hashPassword,
+  verifyRefreshToken,
+} from "@/helpers";
 import events from "@/events/user.event";
 import Logger from "@/loaders/logger.loader";
 import { EventDispatcher } from "event-dispatch";
 import { Prisma } from "@prisma/client";
-import crypto from "crypto";
-import { generateTokenExpiryTime } from "@/helpers";
-import dayjs from "dayjs";
 
 /**
  * Authentication Service Module
@@ -56,12 +58,12 @@ export default class AuthService {
 
       Logger.silly("Sending welcome email");
 
-      await new MailerService().sendWelcomeEmail(user.email, {
-        username: user.email,
-      });
+      await new MailerService().sendWelcomeEmail(user.email);
 
       const newUser = user;
+
       Reflect.deleteProperty(newUser, "password");
+
       return { newUser, token };
     } catch (e) {
       Logger.error(e);
@@ -89,21 +91,25 @@ export default class AuthService {
     if (!user) {
       throw new Error("User not registered");
     }
+
+    // { salt: Buffer.from(user.salt, 'hex') }
     /**
-     * We use verify from argon2 to prevent 'timing based' attacks
+     * argon2 to verify password
      */
     Logger.silly("Checking password");
     const validPassword = await argon2.verify(user.password, password, {
       raw: true,
     });
-    // { salt: Buffer.from(user.salt, 'hex') }
+
     if (validPassword) {
       Logger.silly("Password is valid!");
       const token = generateToken(user);
       const refreshToken = generateRefreshToken(user);
 
       Reflect.deleteProperty(user, "password");
+
       this.eventDispatcher.dispatch(events.user.signIn, { id: user.id });
+
       return { user: user, token, refreshToken };
     } else {
       throw new Error("Invalid Password.");
@@ -111,136 +117,17 @@ export default class AuthService {
   };
 
   /**
-   * Forgot password
-   * @param {string} Email
+   * Regenerates token using refresh token
+   * @param token {string} Token
    * @returns
    */
-  forgotPassword = async ({ email }): Promise<any> => {
-    //fetch user
-    const user = await User.findFirst({ where: { email } });
-    if (!user) {
-      throw new Error("User not found.");
+  regenerateToken = async ({ email, token }): Promise<any> => {
+    const isValid = verifyRefreshToken({ token, email });
+    if (isValid) {
+      let token = generateToken({ email });
+      return { email, token };
+    } else {
+      throw new Error("Invalid refresh token.");
     }
-    let token = await Token.findFirst({ where: { user_id: user.id } });
-    if (token) {
-      await Token.delete({ where: { user_id: user.id } });
-    }
-    let resetToken = crypto.randomBytes(32).toString("hex");
-
-    const hash = await (
-      await argon2.hash(resetToken, { raw: true })
-    ).toString("hex");
-
-    const newToken = await Token.create({
-      data: {
-        user_id: user.id,
-        token: hash,
-        // token_expiry_date: generateTokenExpiryTime(),
-      },
-    });
-
-    console.log(hash);
-    console.log(JSON.stringify(newToken));
-
-    const context = {
-      id: user.id,
-      url: `${process.env.FRONTEND_URL}/auth/validate-token/${user.id}/${hash}`,
-      name: user.username,
-    };
-    await new MailerService().sendForgotPasswordMail(user.email, context);
-    return { newToken };
-  };
-
-  /**
-   * Resets password
-   * @param {email,token,password}
-   * @returns {object} Updated user
-   */
-  resetPassword = async ({ email, token, password }) => {
-    let user = await User.findFirst({
-      where: { email },
-      include: {
-        tokens: true,
-      },
-    });
-    if (!user) {
-      throw new Error("User not found");
-    }
-
-    if (
-      !user?.tokens ||
-      !user?.tokens?.password_reset_token ||
-      user?.tokens?.password_reset_token !== token
-    ) {
-      throw new Error("Invalid or expired password reset token");
-    }
-    if (
-      dayjs
-        .unix(Number.parseInt(user?.tokens?.password_reset_token))
-        .isAfter(dayjs().unix())
-    ) {
-      throw new Error("Expired password reset token.");
-    }
-    if (await argon2.verify(user.password, password, { raw: true })) {
-      throw new Error("New and old password can't be same.");
-    }
-
-    const hashedPassword = await argon2.hash(password);
-
-    await User.update({
-      where: { id: user.id },
-      data: {
-        password: hashedPassword,
-      },
-      select: {
-        id: true,
-        email: true,
-        username: true,
-      },
-    });
-    const updatedUser = await User.findFirst({
-      where: { id: user.id },
-      select: { id: true, email: true, username: true },
-    });
-    await Token.delete({ where: { user_id: user.id } });
-    await new MailerService().sendResetPasswordMail(user.email, {
-      name: user.username,
-    });
-
-    return { updatedUser };
-  };
-
-  /**
-   * Validate Token
-   * @param id
-   * @param token
-   * @returns {boolean} true or false representing whether token is valid or not
-   */
-  validateToken = async (id: number, token: string) => {
-    const user = await User.findFirst({
-      where: { id },
-      include: { tokens: true },
-    });
-    if (!user) {
-      throw new Error("User not found.");
-    }
-
-    console.log(Date.now());
-    console.log(user?.tokens?.token_expiry_date);
-
-    if (
-      !user?.tokens?.password_reset_token ||
-      user?.tokens?.password_reset_token !== token
-    ) {
-      throw new Error("Invalid or expired password reset token.");
-    }
-    if (
-      dayjs
-        .unix(Number.parseInt(user?.tokens?.password_reset_token))
-        .isAfter(dayjs().unix())
-    ) {
-      throw new Error("Expired password reset token.");
-    }
-    return true;
   };
 }
