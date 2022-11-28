@@ -6,7 +6,8 @@ COPY package.json ./
 COPY yarn.lock ./
 COPY tsconfig.json ./
 COPY prisma ./
-RUN yarn install
+RUN npm install -g yarn
+RUN yarn 
 COPY . .
 RUN yarn build
 COPY src/emails /usr/app/ppm/build/src/emails
