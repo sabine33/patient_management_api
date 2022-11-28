@@ -6,10 +6,10 @@ COPY package.json ./
 COPY yarn.lock ./
 COPY tsconfig.json ./
 COPY prisma ./
-RUN npm install -g yarn
+# RUN npm install -g yarn
 RUN yarn 
 COPY . .
 RUN yarn build
 COPY src/emails /usr/app/ppm/build/src/emails
 EXPOSE 4000
-CMD [ "yarn","start" ]
+CMD [ "node", "-r" ,"tsconfig-paths/register" ,"build/src/app.js"]
