@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:18-alpine 
 ARG DATABASE_URL=${DATABASE_URL}
 RUN mkdir -p /usr/app/ppm
 WORKDIR /usr/app/ppm
@@ -6,10 +6,11 @@ COPY package.json ./
 COPY yarn.lock ./
 COPY tsconfig.json ./
 COPY prisma ./
+COPY build ./
 # RUN npm install -g yarn
 RUN yarn 
 COPY . .
-RUN yarn build
+# RUN yarn build
 COPY src/emails /usr/app/ppm/build/src/emails
 EXPOSE 4000
 CMD [ "yarn","prod"]
