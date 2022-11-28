@@ -88,7 +88,11 @@ export default class PatientService {
     } = patientData;
     let patient = await prisma.patients.findFirst({
       where: { id: patient_id },
+      include: {
+        allergies_allergiesTopatients: true,
+      },
     });
+
     if (!patient) {
       throw new Error(
         "Patient with given email doesn't exists. Unable to update."

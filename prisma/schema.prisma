@@ -41,9 +41,8 @@ model patients {
   avatar_filename               String?         @db.VarChar(500)
   allergies                     String[]
   users                         users?          @relation(fields: [added_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  allergies_allergiesTopatients allergies[]
+  patient_allergies allergies[]
   patient_photos                patient_photos?
-
   @@unique([email, phone], map: "uq_patients")
 }
 

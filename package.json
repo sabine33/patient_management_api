@@ -12,7 +12,7 @@
     "db:pull": "prisma db pull && prisma generate",
     "db:migrate": "npx prisma generate && npx prisma migrate dev --create-only && npx prisma migrate dev && npx prisma generate",
     "test": "jest",
-    "db:migrate:prod": "npx prisma generate && npx prisma migrate deploy"
+    "db:push": "prisma db push"
   },
   "repository": {
     "type": "git",
