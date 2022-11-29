@@ -8,11 +8,20 @@ import prisma from "@/loaders/prisma.loader";
  */
 @Service("userService")
 export default class UserService {
+  /**
+   * Get all users
+   * @returns user[]
+   */
   async getAllUsers() {
     const users = await prisma.users.findMany();
     return users;
   }
 
+  /**
+   * Fetch user profile.
+   * @param id
+   * @returns
+   */
   async profile(id) {
     const user = await User.findFirst({ where: { id } });
     if (!user) {

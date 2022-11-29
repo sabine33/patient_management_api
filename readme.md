@@ -1,128 +1,113 @@
-Patient Profile Management API
+# Patient Profile Management API
 
 Patient profile management API is an api that provides a way for an admin to add/update/delete/view patients.
 
-API Documentation:
+## Installation
+
+- Clone the repo.
+- Update environment variables.
+- Switch to node version 18 & run following commands.
+
+```bash
+nvm use 18
+yarn
+npx prisma db push
+yarn dev
+```
+
+or via docker,
+
+```sh
+docker build -t ppm .
+docker run -p 4000:4000 -d ppm
+```
+
+## Deployment
+
+- Clone the repo.
+- Generate docker image & run docker container based on Dockerfile.
+- Database for local setup? use docker-compose.
+
+## Swagger Docs
+
 Swagger document is provided with all the api endpoints.
 
-Tech stack:
-Typescript
-TTypescript
-Jest as a test runner
-Zod as a validator
-typeDI for dependency injection
+[DOCS](https://ppm-api.onrender.com/docs)
 
-Demo URL:
+## Frontend Demo
 
-API Endpoints:
+[DEMO](https://ppm-4440.onrender.com)
+
+## API Endpoints
+
 POST /auth/login : Login
+
 POST /auth/signup : Signup
+
 POST /auth/token : Regenerate token from refresh token
+
 GET /patients: Fetch all patients
+
 GET /patients/:id : Fetch patient from ID
+
 POST /patients : Create a new patient
+
 PUT /patients/:id : Updates patient
+
 DELETE /patients/:id : Deletes a patient
+
 POST /uploads/image : Image upload route
+
 GET /uploads/:filename : Public URL to receive image files.
+
 GET / health check route
 
-## XO Sports Backend Project
+## Tools Used
 
-- The project structure is inspired from bulletproof-nodejs with some tweaks.
-- Xo Sports backend project
-
-# Tools Used
-
-- Docker
+- Docker for deployment (To Render, Github CICD)
 - NodeJS
 - Typescript
-- Prisma
-- TSC Alias for aliasing issues
-
-## How to setup this project
-
-- Run `./docker.sh`
-
-## Deploy
-
-- docker build -t xosports .
-- docker run -p 3000:3000 -d xosports
+- Prisma (ORM)
+- Postgres (Database)
 
 ## Folder structure
 
-| Folder       | Purpose                                                       |
-| ------------ | ------------------------------------------------------------- |
-| api/         | Application entry                                             |
-| config       | Configuration Files                                           |
-| controllers  | API Controllers                                               |
-| decorators   | Decorators                                                    |
-| helpers      | Reusable helper functions                                     |
-| interfaces   | Interface used for other parts                                |
-| jobs         | List of jobs                                                  |
-| loaders      | Loading necessary modules into the projects eg:express,prisma |
-| middlewares  | Express middlewares                                           |
-| models       | Prisma models                                                 |
-| repositories | DB specific modules                                           |
-| routes       | Route specific modules                                        |
-| services     | Handles major operations                                      |
-| subscribers  | Event dispatch and handling                                   |
-| types        | Typescript types                                              |
-| validators   | Validate requests and other data                              |
+| Folder      | Purpose                                                       |
+| ----------- | ------------------------------------------------------------- |
+| src/        | Source code entrypoint                                        |
+| config      | Configuration File                                            |
+| controllers | API Controllers                                               |
+| decorators  | Decorators                                                    |
+| helpers     | Reusable helper functions                                     |
+| interfaces  | Interface used for other parts                                |
+| loaders     | Loading necessary modules into the projects eg:express,prisma |
+| middlewares | Express middlewares                                           |
+| models      | Some Prisma models                                            |
+| routes      | Route specific modules                                        |
+| services    | Handles major operations                                      |
+| subscribers | Event dispatch and handling                                   |
+| types       | Typescript types                                              |
+| validators  | Validate requests and other data                              |
+| emails      | Templates for email notification                              |
+| events      | Events                                                        |
 
-## Packages Used and their purpose
+## Packages used and their purpose
 
-| Module                 | Purpose                                                                                      |
-| ---------------------- | -------------------------------------------------------------------------------------------- |
-| require-all            | Requiring all modules -used for event                                                        |
-| agenda                 | Job scheduling                                                                               |
-| agendash               | Dashboard for agenda                                                                         |
-| argon2                 | For hashing                                                                                  |
-| body-parser            | Parsing body for http-request                                                                |
-| celebrate              | Wrapping joi validation in express                                                           |
-| cors                   | Managing cross origin requests                                                               |
-| dotenv                 | Dotenv file parsing                                                                          |
-| errorhandler           | Development-only error handler middleware                                                    |
-| event-dispatch         | Allows to register subscribers and dispatch events across the application                    |
-| event-emitter          | Event emitter                                                                                |
-| express                | Express is Express 🙂                                                                        |
-| express-async-errors   | remember the pain in async error handling                                                    |
-| express-basic-auth     | Basic auth for agentdash                                                                     |
-| express-jwt            | JWT handling for express                                                                     |
-| express-route-grouping | Grouping related routes just like in adonis                                                  |
-| form-data              | For Mailgun                                                                                  |
-| joi                    | Validation library                                                                           |
-| jsonwebtoken           | Generating and verifying json web tokens                                                     |
-| lodash                 | Needs no intro.                                                                              |
-| mailgun.js             | Mailgun Client                                                                               |
-| method-override        | Lets you use HTTP verbs such as PUT or DELETE in places where the client doesn't support it. |
-| moment                 | Time handling                                                                                |
-| moment-timezone        | Parse and display moments in any timezone                                                    |
-| morgan                 | File uploads                                                                                 |
-| pm2                    | Process Management                                                                           |
-| reflect-metadata       | Reflection library                                                                           |
-| typedi                 | Dependency Injection                                                                         |
-| winston                | A powerful logger                                                                            |
-
-## Devops
-
-- Caprover
-- Docker
-- NodeJS
-- Postgres
-- Prisma
-
-## Task
-
-- Link with postgreSQL
-- Error handling
-- Setup ORM (Prisma Preferred)
-- Implement authentication: Register/Login/Signup
-
-\*https://stackoverflow.com/questions/59179787/tsc-doesnt-compile-alias-paths
-
-## Why eTSC ?
-
-- Extremely Fast build (No slow tsc -> uses esbuild)
-- TSConfig path supports nope 😢 , tspaths here to help
-- Now normal node could do the
+| Module               | Purpose                                                                   |
+| -------------------- | ------------------------------------------------------------------------- |
+| argon2               | For hashing                                                               |
+| body-parser          | Parsing body for http-request                                             |
+| cors                 | Managing cross origin requests                                            |
+| dotenv               | Dotenv file parsing                                                       |
+| event-dispatch       | Allows to register subscribers and dispatch events across the application |
+| express              | Express is Express 🙂                                                     |
+| express-async-errors | remember the pain in async error handling                                 |
+| jsonwebtoken         | Generating and verifying json web tokens                                  |
+| nodemailer           | Mailing purpose.                                                          |
+| multer               | File uploads                                                              |
+| reflect-metadata     | Reflection library                                                        |
+| typedi               | Dependency Injection                                                      |
+| winston              | A powerful logger                                                         |
+| zod                  | Validation library                                                        |
+| typedi               | Dependency Injection                                                      |
+| swc-register         | Swc for fast perf.                                                        |

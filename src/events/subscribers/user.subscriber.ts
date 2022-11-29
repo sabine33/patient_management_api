@@ -4,7 +4,6 @@ import { Logger } from "winston";
 import events from "../user.event";
 import { IUser } from "@/interfaces/user.interface";
 import MailerService from "@/services/mailer.service";
-import { now } from "lodash";
 
 @EventSubscriber()
 export default class UserSubscriber {
@@ -14,7 +13,7 @@ export default class UserSubscriber {
     try {
       Logger.info({ message: "User signed in" });
     } catch (e) {
-      Logger.error(`🔥 Error on event ${events.user.signIn}: %o`, e);
+      Logger.error(` Error on event ${events.user.signIn}: %o`, e);
       throw e;
     }
   }
@@ -26,7 +25,7 @@ export default class UserSubscriber {
       await new MailerService().sendWelcomeEmail(email);
       Logger.info({ message: email });
     } catch (e) {
-      Logger.error(`🔥 Error on event ${events.user.signUp}: %o`, e);
+      Logger.error(`Error on event ${events.user.signUp}: %o`, e);
       throw e;
     }
   }

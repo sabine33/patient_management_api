@@ -1,11 +1,11 @@
 import { asyncForEach } from "@/helpers";
 import LoggerInstance from "@/loaders/logger.loader";
-import AuthService from "@/services/auth.service";
 import "reflect-metadata";
-import { Container, Inject, Service, Token } from "typedi";
+import { Container } from "typedi";
 
 type containerType = { key: String; object: Object };
 
+//container loading module
 export default async (containers: containerType[]) => {
   try {
     await asyncForEach(containers, async (item) => {
@@ -13,7 +13,7 @@ export default async (containers: containerType[]) => {
     });
     LoggerInstance.info("✌️injected into container");
   } catch (e) {
-    LoggerInstance.error("🔥 Error on container loading process: %o", e);
+    LoggerInstance.error("Error on container loading process: %o", e);
     throw e;
   }
 };

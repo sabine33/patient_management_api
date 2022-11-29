@@ -4,6 +4,6 @@ export default {
     signIn: "onUserSignIn",
   },
   game: {
-    registration: "onUserRegisteredToGame",
+    registration: "onUserRegistered",
   },
 };

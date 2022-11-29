@@ -17,7 +17,7 @@ const transport = nodemailer.createTransport(
  */
 export async function sendEmail({ receiver, subject, template }) {
   const fromEmail = `${process.env.MAILJET_SENDER || "PPM API"} <${
-    process.env.MAILJET_SENDER_EMAIL || "sabin.khana.33l@gmail.com"
+    process.env.MAILJET_SENDER_EMAIL || "sabin.khanal.33@gmail.com"
   }>`;
 
   console.log(renderHtmlTemplate(template, null));
