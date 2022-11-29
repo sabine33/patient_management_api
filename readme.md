@@ -41,6 +41,8 @@ Swagger document is provided with all the api endpoints.
 
 [DOCS](https://ppm-api.onrender.com/docs)
 
+![API Docs](screenshot.png?raw=true "API docs Screenshot")
+
 ## Frontend Demo
 
 [DEMO](https://ppm-4440.onrender.com)
