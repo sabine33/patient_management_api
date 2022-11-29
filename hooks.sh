@@ -1,5 +1,5 @@
-TARGET="/home/techbyte/sabinkhanal.git"
-GIT_DIR="/home/techbyte/sabinkhanal.git"
+TARGET="/home/techbyte/ppm.git"
+GIT_DIR="/home/techbyte/ppm.git"
 BRANCH="master"
 while read oldrev newrev ref
 do

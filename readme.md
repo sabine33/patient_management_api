@@ -38,6 +38,17 @@ Swagger document is provided with all the api endpoints.
 
 [DEMO](https://ppm-4440.onrender.com)
 
+## Tech Stack
+
+NodeJS 18
+Swagger : API Documentation
+Prisma : ORM
+Typescript
+Express
+Jest
+Zod for api validation
+Docker
+
 ## API Endpoints
 
 POST /auth/login : Login
