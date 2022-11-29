@@ -28,6 +28,8 @@ docker run -p 4000:4000 -d ppm
 - Generate docker image & run docker container based on Dockerfile.
 - Database for local setup? use docker-compose.
 
+* Git push on staging branch will deploy it to render.
+
 ## Swagger Docs
 
 Swagger document is provided with all the api endpoints.
@@ -48,6 +50,7 @@ Express
 Jest
 Zod for api validation
 Docker
+Docker container, frontend & database deployed to Render.
 
 ## API Endpoints
 
