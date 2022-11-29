@@ -18,8 +18,8 @@ yarn dev
 or via docker,
 
 ```sh
-docker build -t ppm .
-docker run -p 4000:4000 -d ppm
+docker build -t ppmapi .
+docker run -p 4000:4000 -d ppmapi
 ```
 
 ## Deployment
@@ -29,6 +29,10 @@ docker run -p 4000:4000 -d ppm
 - Database for local setup? use docker-compose.
 
 * Git push on staging branch will deploy it to render.
+
+## Database
+
+- Database first approach was used, but you can do : npx prisma db push or run seed.sql file on database server.
 
 ## Swagger Docs
 
