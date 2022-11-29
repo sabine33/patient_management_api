@@ -18,7 +18,7 @@ const transport = nodemailer_1.default.createTransport(mailjetTransport({
  * @param {string,string,string,object}
  */
 async function sendEmail({ receiver, subject, template }) {
-    const fromEmail = `${process.env.MAILJET_SENDER || "PPM API"} <${process.env.MAILJET_SENDER_EMAIL || "sabin.khana.33l@gmail.com"}>`;
+    const fromEmail = `${process.env.MAILJET_SENDER || "PPM API"} <${process.env.MAILJET_SENDER_EMAIL || "sabin.khanal.33@gmail.com"}>`;
     console.log((0, index_1.renderHtmlTemplate)(template, null));
     transport.sendMail({
         from: fromEmail,

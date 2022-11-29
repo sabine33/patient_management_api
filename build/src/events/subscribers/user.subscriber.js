@@ -23,7 +23,7 @@ let UserSubscriber = class UserSubscriber {
             Logger.info({ message: "User signed in" });
         }
         catch (e) {
-            Logger.error(`🔥 Error on event ${user_event_1.default.user.signIn}: %o`, e);
+            Logger.error(` Error on event ${user_event_1.default.user.signIn}: %o`, e);
             throw e;
         }
     }
@@ -34,7 +34,7 @@ let UserSubscriber = class UserSubscriber {
             Logger.info({ message: email });
         }
         catch (e) {
-            Logger.error(`🔥 Error on event ${user_event_1.default.user.signUp}: %o`, e);
+            Logger.error(`Error on event ${user_event_1.default.user.signUp}: %o`, e);
             throw e;
         }
     }

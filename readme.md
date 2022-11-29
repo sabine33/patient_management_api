@@ -28,6 +28,7 @@ docker run -p 4000:4000 -d ppmapi
 - Generate docker image & run docker container based on Dockerfile.
 - Database for local setup? use docker-compose.
 
+* As it's taking more time to build on server , I am pushing a prebuilt image to server.
 * Git push on staging branch will deploy it to render.
 
 ## Database

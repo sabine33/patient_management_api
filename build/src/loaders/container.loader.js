@@ -7,6 +7,7 @@ const helpers_1 = require("@/helpers");
 const logger_loader_1 = __importDefault(require("@/loaders/logger.loader"));
 require("reflect-metadata");
 const typedi_1 = require("typedi");
+//container loading module
 exports.default = async (containers) => {
     try {
         await (0, helpers_1.asyncForEach)(containers, async (item) => {
@@ -15,7 +16,7 @@ exports.default = async (containers) => {
         logger_loader_1.default.info("✌️injected into container");
     }
     catch (e) {
-        logger_loader_1.default.error("🔥 Error on container loading process: %o", e);
+        logger_loader_1.default.error("Error on container loading process: %o", e);
         throw e;
     }
 };

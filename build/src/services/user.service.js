@@ -16,10 +16,19 @@ const prisma_loader_1 = __importDefault(require("@/loaders/prisma.loader"));
  * User Service Module
  */
 let UserService = class UserService {
+    /**
+     * Get all users
+     * @returns user[]
+     */
     async getAllUsers() {
         const users = await prisma_loader_1.default.users.findMany();
         return users;
     }
+    /**
+     * Fetch user profile.
+     * @param id
+     * @returns
+     */
     async profile(id) {
         const user = await models_1.User.findFirst({ where: { id } });
         if (!user) {

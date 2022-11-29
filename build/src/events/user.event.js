@@ -6,7 +6,7 @@ exports.default = {
         signIn: "onUserSignIn",
     },
     game: {
-        registration: "onUserRegisteredToGame",
+        registration: "onUserRegistered",
     },
 };
 //# sourceMappingURL=user.event.js.map
